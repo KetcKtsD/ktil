@@ -14,7 +14,7 @@ interface ValidationScope<T : Any> {
     /**
      * Set the [Validator] to validate the receiver
      */
-    infix fun <P : Any> KProperty1<T, P?>.validateBy(validator: Validator<P>)
+    infix fun <P : Any> KProperty1<T, P?>.validateBy(validator: Validator<in P>)
 
     /**
      * Set conditions for receiver validation
@@ -24,7 +24,7 @@ interface ValidationScope<T : Any> {
     /**
      * Set the [Validator] to validate the receiver
      */
-    infix fun KClass<T>.validateBy(validator: Validator<T>)
+    infix fun KClass<T>.validateBy(validator: Validator<in T>)
 
     /**
      *  Set conditions for receiver item validation
@@ -34,5 +34,5 @@ interface ValidationScope<T : Any> {
     /**
      * Set the [Validator] to validate the receiver item
      */
-    infix fun <P : Any> KProperty1<T, Collection<P?>?>.validateByEach(validator: Validator<P>)
+    infix fun <P : Any> KProperty1<T, Collection<P?>?>.validateByEach(validator: Validator<in P>)
 }

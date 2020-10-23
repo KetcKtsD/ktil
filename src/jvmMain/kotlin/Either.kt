@@ -133,11 +133,13 @@ inline class Either<L, R> @PublishedApi internal constructor(
 }
 
 /**
- * @see Either.Companion.toLeft
+ * @see Either.Companion.left
  */
-inline fun <reified L, reified R> L.toLeft(): Either<L, R> = Either.left(this)
+@Suppress("NOTHING_TO_INLINE")
+inline fun <L, R> L.asLeft(): Either<L, R> = Either.left(this)
 
 /**
- * @see Either.Companion.toRight
+ * @see Either.Companion.right
  */
-inline fun <reified L, reified R> R.toRight(): Either<L, R> = Either.right(this)
+@Suppress("NOTHING_TO_INLINE")
+inline fun <L, R> R.asRight(): Either<L, R> = Either.right(this)
