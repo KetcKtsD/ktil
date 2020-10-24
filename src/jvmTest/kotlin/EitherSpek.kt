@@ -23,12 +23,12 @@ class EitherSpek : Spek({
             }
 
             it("leftOrElseは与えられた関数を実行せずにLeftを返す") {
-                assertSame(left, either.leftOrElse { Left() })
+                assertSame(left, either.getLeftOrElse { Left() })
             }
 
             it("rightOrElseは与えられた関数を実行してRightを返す") {
                 val right = Right()
-                assertSame(right, either.rightOrElse { right })
+                assertSame(right, either.getRightOrElse { right })
             }
 
             it("leftは与えられた関数を実行する") {
@@ -76,11 +76,11 @@ class EitherSpek : Spek({
 
             it("leftOrElseは与えられた関数を実行してLeftを返す") {
                 val left = Left()
-                assertSame(left, either.leftOrElse { left })
+                assertSame(left, either.getLeftOrElse { left })
             }
 
             it("rightOrElseは与えられた関数を実行せずにLeftを返す") {
-                assertSame(right, either.rightOrElse { Right() })
+                assertSame(right, either.getRightOrElse { Right() })
             }
 
             it("leftは与えられた関数を実行しない") {
