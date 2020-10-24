@@ -79,18 +79,18 @@ inline class Either<L, R> @PublishedApi internal constructor(
      * Return this Left or result of [onRight] if this is a Right
      */
     @Suppress("UNCHECKED_CAST")
-    inline fun <L1 : L, R1 : R> leftOrElse(onRight: (R) -> Either<L1, R1>): Either<out L, out R> {
+    inline fun <L1 : L, R1 : R> leftOrElse(onRight: (R) -> Either<L1, R1>): Either<L, R> {
         contract { callsInPlace(onRight, InvocationKind.AT_MOST_ONCE) }
-        return if (leftOrRight.isRight) onRight(leftOrRight.value as R) else this
+        return if (leftOrRight.isRight) onRight(leftOrRight.value as R) as Either<L, R> else this
     }
 
     /**
      * Return this Right or result of [onLeft] if this is a Left
      */
     @Suppress("UNCHECKED_CAST")
-    inline fun <L1 : L, R1 : R> rightOrElse(onLeft: (L) -> Either<L1, R1>): Either<out L, out R> {
+    inline fun <L1 : L, R1 : R> rightOrElse(onLeft: (L) -> Either<L1, R1>): Either<L, R> {
         contract { callsInPlace(onLeft, InvocationKind.AT_MOST_ONCE) }
-        return if (leftOrRight.isLeft) onLeft(leftOrRight.value as L) else this
+        return if (leftOrRight.isLeft) onLeft(leftOrRight.value as L) as Either<L, R> else this
     }
 
     /**
@@ -133,18 +133,18 @@ inline class Either<L, R> @PublishedApi internal constructor(
      * Binds the result of [onLeft] Left
      */
     @Suppress("UNCHECKED_CAST")
-    inline fun <L1, R1 : R> leftFlatMap(onLeft: (L) -> Either<L1, R1>): Either<L1, out R> {
+    inline fun <L1, R1 : R> leftFlatMap(onLeft: (L) -> Either<L1, R1>): Either<L1, R> {
         contract { callsInPlace(onLeft, InvocationKind.AT_MOST_ONCE) }
-        return if (leftOrRight.isLeft) return onLeft(leftOrRight.value as L) else right(leftOrRight.value as R)
+        return if (leftOrRight.isLeft) return onLeft(leftOrRight.value as L) as Either<L1, R> else right(leftOrRight.value as R)
     }
 
     /**
      * Binds the result of [onRight] Right
      */
     @Suppress("UNCHECKED_CAST")
-    inline fun <L1 : L, R1> rightFlatMap(onRight: (R) -> Either<L1, R1>): Either<out L, R1> {
+    inline fun <L1 : L, R1> rightFlatMap(onRight: (R) -> Either<L1, R1>): Either<L, R1> {
         contract { callsInPlace(onRight, InvocationKind.AT_MOST_ONCE) }
-        return if (leftOrRight.isRight) return onRight(leftOrRight.value as R) else left(leftOrRight.value as L)
+        return if (leftOrRight.isRight) return onRight(leftOrRight.value as R) as Either<L, R1> else left(leftOrRight.value as L)
     }
 
     /**
@@ -243,7 +243,7 @@ inline fun <L, R, R1 : R> Either<L, R>.getOrElse(onLeft: (L) -> R1): R {
  *
  * @see Either.rightOrElse
  */
-inline fun <L, R, L1 : L, R1 : R> Either<L, R>.orElse(onLeft: (L) -> Either<L1, R1>): Either<out L, out R> {
+inline fun <L, R, L1 : L, R1 : R> Either<L, R>.orElse(onLeft: (L) -> Either<L1, R1>): Either<L, R> {
     contract { callsInPlace(onLeft, InvocationKind.AT_MOST_ONCE) }
     return rightOrElse(onLeft)
 }
@@ -263,7 +263,7 @@ inline fun <L, R, R1> Either<L, R>.map(onRight: (R) -> R1): Either<L, R1> {
  *
  * @see Either.rightFlatMap
  */
-inline fun <L, R, L1 : L, R1> Either<L, R>.flatMap(onRight: (R) -> Either<L1, R1>): Either<out L, R1> {
+inline fun <L, R, L1 : L, R1> Either<L, R>.flatMap(onRight: (R) -> Either<L1, R1>): Either<L, R1> {
     contract { callsInPlace(onRight, InvocationKind.AT_MOST_ONCE) }
     return rightFlatMap(onRight)
 }
