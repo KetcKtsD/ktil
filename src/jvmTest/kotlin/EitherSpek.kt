@@ -199,5 +199,96 @@ class EitherSpek : Spek({
                 assertSame(right, result.left)
             }
         }
+
+        describe("equals") {
+            context("LeftとRightの比較") {
+                it("同じ値を格納していてもfalseを返す") {
+                    val any = Any()
+                    val either1: Either<Any, Any> = any.asLeft()
+                    val either2: Either<Any, Any> = any.asRight()
+                    assertNotEquals(either1, either2)
+                }
+
+                it("違う値を格納していればfalseを返す") {
+                    val either1: Either<Any, Any> = Any().asLeft()
+                    val either2: Either<Any, Any> = Any().asRight()
+                    assertNotEquals(either1, either2)
+                }
+            }
+
+            context("Left同士の比較") {
+                it("同じ値を格納していればtrueを返す") {
+                    val any = Any()
+                    val either1: Either<Any, Any> = any.asLeft()
+                    val either2: Either<Any, Any> = any.asLeft()
+                    assertEquals(either1, either2)
+                }
+
+                it("違う値を格納していればfalseを返す") {
+                    val either1: Either<Any, Any> = Any().asLeft()
+                    val either2: Either<Any, Any> = Any().asLeft()
+                    assertNotEquals(either1, either2)
+                }
+            }
+
+            context("Right同士の比較") {
+                it("同じ値を格納していればtrueを返す") {
+                    val any = Any()
+                    val either1: Either<Any, Any> = any.asRight()
+                    val either2: Either<Any, Any> = any.asRight()
+                    assertEquals(either1, either2)
+                }
+
+                it("違う値を格納していればfalseを返す") {
+                    val either1: Either<Any, Any> = Any().asRight()
+                    val either2: Either<Any, Any> = Any().asRight()
+                    assertNotEquals(either1, either2)
+                }
+            }
+        }
+    }
+
+    describe("ext functions") {
+        it("mergeLeftは値を変更しない") {
+            val left: Either<Left, ExtLeft> = Left().asLeft()
+            assertSame(left.left, left.mergeLeft())
+            val right: Either<Left, ExtLeft> = ExtLeft().asRight()
+            assertSame(right.right, right.mergeLeft())
+        }
+
+        it("mergeRightは値を変更しない") {
+            val left: Either<ExtRight, Right> = Right().asRight()
+            assertSame(left.right, left.mergeRight())
+            val right: Either<ExtRight, Right> = ExtRight().asLeft()
+            assertSame(right.left, right.mergeRight())
+        }
+
+        it("joinLeftはLeftに値をJoinする") {
+            val leftLeft: Either<Int, String> = 1.asLeft()
+            val leftRight: Either<Int, String> = "leftRight".asRight()
+
+            val eitherLeftLeft: Either<Either<Int, String>, String> = leftLeft.asLeft()
+            assertSame(leftLeft.left, eitherLeftLeft.joinLeft().left)
+
+            val eitherLeftRight: Either<Either<Int, String>, String> = leftRight.asLeft()
+            assertSame(leftRight.right, eitherLeftRight.joinLeft().right)
+
+            val eitherRight: Either<Either<Int, String>, String> = "eitherRight".asRight()
+            assertSame(eitherRight.right, eitherRight.joinLeft().right)
+        }
+
+        it("joinRightはRightに値をJoinする") {
+            val rightLeft: Either<Int, String> = 1.asLeft()
+            val rightRight: Either<Int, String> = "rightRight".asRight()
+
+            val eitherRightLeft: Either<Int, Either<Int, String>> = rightLeft.asRight()
+            assertSame(rightLeft.left, eitherRightLeft.joinRight().left)
+
+            val eitherRightRight: Either<Int, Either<Int, String>> = rightRight.asRight()
+            assertSame(rightRight.right, eitherRightRight.joinRight().right)
+
+            val eitherLeft: Either<Int, Either<Int, String>> = 2.asLeft()
+            assertSame(eitherLeft.left, eitherLeft.joinRight().left)
+        }
     }
 })

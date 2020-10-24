@@ -176,13 +176,13 @@ inline class Either<L, R> @PublishedApi internal constructor(
 
         override fun equals(other: Any?): Boolean {
             if (other == null) return false
-
             if (this === other) return true
+            if (this::class != other::class) return false
 
-            if (other !is LeftOrRight) return false
+            other as LeftOrRight
 
-            if (value != other) return false
             if (isLeft != other.isLeft) return false
+            if (value != other.value) return false
             return true
         }
 
