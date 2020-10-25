@@ -5,9 +5,6 @@ package tech.ketc.util
 
 import kotlin.contracts.*
 
-typealias NestedEitherL<LL, LR, R> = Either<Either<LL, LR>, R>
-typealias NestedEitherR<L, RL, RR> = Either<L, Either<RL, RR>>
-
 /**
  * Simple Either type
  */
