@@ -1,8 +1,8 @@
 @file:Suppress("unused", "NOTHING_TO_INLINE")
 
-package tech.ketc.util.validator.predicates
+package tech.ketc.ktil.validation.predicates
 
-import tech.ketc.util.validator.*
+import tech.ketc.ktil.validation.*
 
 inline val V.positiveNumber get() = Predicate<Number> { it.toDouble() > 0.0 }
 inline val V.negativeNumber get() = Predicate<Number> { it.toDouble() < 0.0 }

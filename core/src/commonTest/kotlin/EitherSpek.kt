@@ -1,6 +1,6 @@
-package tech.ketc.util
+package tech.ketc.ktil
 
-import org.junit.jupiter.api.*
+
 import org.spekframework.spek2.*
 import org.spekframework.spek2.style.specification.*
 import kotlin.test.*
@@ -19,7 +19,7 @@ class EitherSpek : Spek({
             it("leftはLeftを返す") { assertSame(left, either.left) }
 
             it("rightはNoSuchElementExceptionを投げる") {
-                assertThrows<NoSuchElementException> { either.right }
+                assertTrue(assertFails { either.right } is NoSuchElementException)
             }
 
             it("getLeftOrElseは与えられた関数を実行せずにLeftの値を返す") {
@@ -113,7 +113,7 @@ class EitherSpek : Spek({
             it("isRightはtrueを返す") { assertTrue(either.isRight) }
 
             it("leftはNoSuchElementExceptionを投げる") {
-                assertThrows<NoSuchElementException> { either.left }
+                assertTrue(assertFails { either.left } is NoSuchElementException)
             }
 
             it("rightはRightを返す") { assertSame(right, either.right) }
@@ -292,3 +292,4 @@ class EitherSpek : Spek({
         }
     }
 })
+

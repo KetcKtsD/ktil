@@ -1,7 +1,7 @@
 @file:Suppress("NOTHING_TO_INLINE")
 @file:OptIn(ExperimentalContracts::class)
 
-package tech.ketc.util
+package tech.ketc.ktil
 
 import kotlin.contracts.*
 
