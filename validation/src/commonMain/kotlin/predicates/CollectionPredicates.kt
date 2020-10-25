@@ -1,8 +1,8 @@
 @file:Suppress("unused", "NOTHING_TO_INLINE")
 
-package tech.ketc.util.validator.predicates
+package tech.ketc.ktil.validation.predicates
 
-import java.util.function.*
+import tech.ketc.ktil.validation.*
 
 inline val V.emptyList get() = Predicate<Collection<*>> { it.isEmpty() }
 inline val V.notEmptyList get() = Predicate<Collection<*>> { it.isEmpty() }

@@ -1,6 +1,6 @@
-package tech.ketc.util.validator
+package tech.ketc.ktil.validation
 
-import tech.ketc.util.*
+import tech.ketc.ktil.*
 import kotlin.reflect.*
 
 typealias ValidationResult<T> = Either<List<ValidationError>, out T>

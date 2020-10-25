@@ -1,8 +1,8 @@
-package tech.ketc.util.validator
+package tech.ketc.ktil.validation
 
-import tech.ketc.util.*
-import java.util.*
+import tech.ketc.ktil.*
 import kotlin.reflect.*
+import kotlin.collections.*
 
 /**
  * Validator

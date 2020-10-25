@@ -1,6 +1,6 @@
 @file:Suppress("NOTHING_TO_INLINE")
 
-package tech.ketc.util
+package tech.ketc.ktil
 
 /**
  * @param V Mapped Type

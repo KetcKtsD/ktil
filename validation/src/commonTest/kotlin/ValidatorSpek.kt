@@ -1,4 +1,4 @@
-package tech.ketc.util.validator
+package tech.ketc.ktil.validation
 
 import org.spekframework.spek2.*
 import org.spekframework.spek2.style.specification.*

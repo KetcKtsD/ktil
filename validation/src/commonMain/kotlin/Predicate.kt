@@ -1,4 +1,4 @@
-package tech.ketc.util.validator
+package tech.ketc.ktil.validation
 
 /**
  * The actual Validation process

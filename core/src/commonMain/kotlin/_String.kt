@@ -1,5 +1,7 @@
-package tech.ketc.util
+package tech.ketc.ktil
 
-val String.strictLength get() = strictLength(this)
+val String.strictLength get() = StrExt.strictLength(this)
 
-internal external fun strictLength(str: String): Int
+internal expect object StrExt {
+    fun strictLength(str: String): Int
+}

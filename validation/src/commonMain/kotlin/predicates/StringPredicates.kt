@@ -1,9 +1,9 @@
 @file:Suppress("unused", "NOTHING_TO_INLINE")
 
-package tech.ketc.util.validator.predicates
+package tech.ketc.ktil.validation.predicates
 
-import tech.ketc.util.*
-import tech.ketc.util.validator.*
+import tech.ketc.ktil.*
+import tech.ketc.ktil.validation.*
 
 
 class EmailPredicate : Predicate<String> {

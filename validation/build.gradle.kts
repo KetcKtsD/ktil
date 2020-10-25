@@ -40,6 +40,11 @@ kotlin {
 
     @Suppress("UNUSED_VARIABLE")
     sourceSets {
+        all {
+            dependencies {
+                implementation(project(":ktil-core"))
+            }
+        }
         val commonMain by getting {
             dependencies {
                 implementation(kotlin("stdlib-common", kotlinVersion))
