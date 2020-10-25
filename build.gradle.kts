@@ -14,7 +14,7 @@ kotlin {
     jvm {
         compilations.all {
             kotlinOptions {
-                jvmTarget = "13"
+                jvmTarget = "14"
                 freeCompilerArgs = listOf(
                     "-XXLanguage:+InlineClasses",
                     "-Xopt-in=kotlin.RequiresOptIn"
@@ -45,8 +45,7 @@ kotlin {
     }
 }
 
-tasks.named("jvmTest") {
-    this as Test
+tasks.named<Test>("jvmTest") {
     useJUnitPlatform {
         includeEngines = setOf("spek", "spek2")
     }
