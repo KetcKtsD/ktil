@@ -1,20 +1,20 @@
-package tech.ketc.util.validator
+package tech.ketc.ktil.validation
 
-import tech.ketc.util.*
-import java.util.*
+import tech.ketc.ktil.*
 import kotlin.reflect.*
+import kotlin.collections.*
 
 /**
  * Validator
  */
-abstract class Validator<in T : Any>(initializer: ValidationScope<T>.() -> Unit) {
+abstract class Validator<T : Any>(initializer: ValidationScope<T>.() -> Unit) {
     private val _scope = ValidationScopeImpl<T>().apply(initializer)
     private val scope get() = _scope as ValidationScopeImpl<*>
 
     /**
      * Returns right on successful validation
      */
-    fun validate(target: T): ValidationResult = _scope.validate(target)
+    fun validate(target: T): ValidationResult<T> = _scope.validate(target)
 
     private class ValidationScopeImpl<T : Any> : ValidationScope<T> {
         private val validations = LinkedList<Validation>()
@@ -30,7 +30,7 @@ abstract class Validator<in T : Any>(initializer: ValidationScope<T>.() -> Unit)
         }
 
         @Suppress("UNCHECKED_CAST")
-        override fun <P : Any> KProperty1<T, P?>.validateBy(validator: Validator<P>) {
+        override fun <P : Any> KProperty1<T, P?>.validateBy(validator: Validator<in P>) {
             val composite = Validation.CompositeValidation(
                 this as KProperty1<Any, Any?>,
                 validator.scope as ValidationScopeImpl<Any>
@@ -46,7 +46,7 @@ abstract class Validator<in T : Any>(initializer: ValidationScope<T>.() -> Unit)
         }
 
         @Suppress("UNCHECKED_CAST")
-        override fun KClass<T>.validateBy(validator: Validator<T>) {
+        override fun KClass<T>.validateBy(validator: Validator<in T>) {
             val composite = Validation.ClassCompositeValidation(
                 validator.scope as ValidationScopeImpl<Any>
             )
@@ -64,7 +64,7 @@ abstract class Validator<in T : Any>(initializer: ValidationScope<T>.() -> Unit)
         }
 
         @Suppress("UNCHECKED_CAST")
-        override fun <P : Any> KProperty1<T, Collection<P?>?>.validateByEach(validator: Validator<P>) {
+        override fun <P : Any> KProperty1<T, Collection<P?>?>.validateByEach(validator: Validator<in P>) {
             val composite = Validation.CollectionCompositeValidation(
                 this as KProperty1<Any, Collection<Any?>?>,
                 validator.scope as ValidationScopeImpl<Any>
@@ -72,7 +72,7 @@ abstract class Validator<in T : Any>(initializer: ValidationScope<T>.() -> Unit)
             validations.add(composite)
         }
 
-        fun validate(target: T): ValidationResult {
+        fun validate(target: T): ValidationResult<T> {
             val errors = LinkedList<ValidationError>()
             for (validation in validations) {
                 when (validation) {
@@ -126,7 +126,7 @@ abstract class Validator<in T : Any>(initializer: ValidationScope<T>.() -> Unit)
                     }
                 }
             }
-            return if (errors.isEmpty()) ValidationOk.toRight() else errors.toLeft()
+            return if (errors.isEmpty()) target.asRight() else errors.asLeft()
         }
     }
 
