@@ -57,3 +57,18 @@ kotlin {
         }
     }
 }
+
+publishing {
+    repositories {
+        val token = System.getenv("GITHUB_TOKEN") ?: return@repositories
+        val owner = System.getenv("GITHUB_OWNER") ?: return@repositories
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/$owner/ktil")
+            credentials {
+                username = owner
+                password = token
+            }
+        }
+    }
+}
