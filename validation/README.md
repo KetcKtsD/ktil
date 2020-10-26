@@ -52,7 +52,7 @@ val principalUserValidator = validator<PrincipalUser> {
 ```
 
 ### 実際にバリデートする
-```
+```kotlin
 val validator = validator<User> {
     // いろいろ定義する
 }
