@@ -28,7 +28,7 @@ jobs:
     # The USERNAME and TOKEN need to correspond to the credentials environment variables used in
     # the publishing section of your build.gradle
     - name: Publish to GitHub Packages
-      run: gradle publishToGitHubPackages
+      run: gradle publishKotlinMultiPlatformPublicationToGitHubPackagesRepository
       env:
         GITHUB_OWNER: ${{ github.repository_owner }}
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -24,6 +24,13 @@ jobs:
         key: ${{ runner.os }}-gradle-wrapper-${{ hashFiles('**/*.gradle.kts') }}
         restore-keys: |
           ${{ runner.os }}-gradle-wrapper-
+    - name: gradle dependencies cache
+      uses: actions/cache@v1
+      with:
+        path: ~/.gradle/caches
+        key: ${{ runner.os }}-gradle-caches-${{ hashFiles('**/*.gradle.kts') }}
+        restore-keys: |
+          ${{ runner.os }}-gradle-caches-
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
     - name: Build with Gradle
