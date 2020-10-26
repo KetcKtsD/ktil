@@ -10,21 +10,8 @@ repositories {
 
 kotlin {
     jvm {
-        compilations.all {
-            kotlinOptions { jvmTarget = "14" }
-        }
-        testRuns.all {
-            executionTask.configure {
-                val useJUnitPlatform = this::class.java.methods.filter { it.name == "useJUnitPlatform" }
-                val action = Action<JUnitPlatformOptions> { includeEngines = setOf("spek", "spek2") }
-                useJUnitPlatform.forEach {
-                    try {
-                        it.invoke(this, action)
-                    } catch (e: Throwable) {
-                    }
-                }
-            }
-        }
+        compilations.all { kotlinOptions { jvmTarget = "14" } }
+        testRuns.all { executionTask.configure { useJUnitPlatform { includeEngines = setOf("spek", "spek2") } } }
         withJava()
     }
 
