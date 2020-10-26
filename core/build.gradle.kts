@@ -10,6 +10,8 @@ repositories {
 }
 
 kotlin {
+    metadata { mavenPublication { artifactId = "${project.name}-common" } }
+
     jvm {
         compilations.all { kotlinOptions { jvmTarget = "14" } }
         testRuns.all { executionTask.configure { useJUnitPlatform { includeEngines = setOf("spek", "spek2") } } }
