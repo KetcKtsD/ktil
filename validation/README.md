@@ -7,7 +7,7 @@
 * gradle.kts
 
 ```kotlin
-implementation("tech.ketc.ktil:ktil-validation:$ktilVersion")
+implementation("tech.ketc.ktil:ktil-validation-$platform:$ktilVersion")
 ```
 
 ## samples

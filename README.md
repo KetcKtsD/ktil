@@ -9,13 +9,35 @@ KotlinのMPPなライブラリ郡､ リリースされたKotlinの新機能の�
 
 ## Installation
 
-* gradle.kts
+[GitHub Packages](https://docs.github.com/ja/free-pro-team@latest/packages/using-github-packages-with-your-projects-ecosystem/configuring-gradle-for-use-with-github-packages#authenticating-to-github-packages)に公開してありあます｡
 
-```kotlin
+* notations
 
 ```
+implementation("tech.ketc.ktil:ktil-$module-$platform:$ktilVersion")
+```
 
-## modules
+* repository setting
+
+```kotlin
+repositories {
+    jcenter()
+    maven {
+        url = uri("https://maven.pkg.github.com/ketcktsd/ktil/")
+        credentials {
+            username = "github-username"
+            password = "github-token"
+        }
+    }
+}
+```
+
+## Supported platforms
+
+- `common` (metadata)
+- `jvm`
+
+## Modules
 
 ### [ktil-core](https://github.com/KetcKtsD/ktil/tree/develop/core)
 ちょっとした拡張関数や`Either<L､R>`などのユーティリティを提供する

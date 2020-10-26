@@ -7,5 +7,5 @@
 * gradle.kts
 
 ```kotlin
-implementation("tech.ketc.ktil:ktil-core:$ktilVersion")
+implementation("tech.ketc.ktil:ktil-core-$platform:$ktilVersion")
 ```
