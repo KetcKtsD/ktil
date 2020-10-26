@@ -1,6 +1,5 @@
 package tech.ketc.ktil
 
-
 import org.spekframework.spek2.*
 import org.spekframework.spek2.style.specification.*
 import kotlin.test.*
