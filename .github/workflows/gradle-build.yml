@@ -4,7 +4,7 @@
 name: CI with Gradle
 
 on:
-  [ push, pull_request ]
+  [ push ]
 
 jobs:
   build:
