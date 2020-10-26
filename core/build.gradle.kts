@@ -1,6 +1,6 @@
 plugins {
     kotlin("multiplatform")
-    id("org.gradle.maven-publish")
+    id("maven-publish")
 }
 
 repositories {
@@ -23,37 +23,31 @@ kotlin {
         }
     }
 
-    val kotlinVersion: String by extra
     val spek: (String) -> String by extra
 
     @Suppress("UNUSED_VARIABLE")
     sourceSets {
         val commonMain by getting {
-            dependencies {
-                implementation(kotlin("stdlib-common", kotlinVersion))
-            }
+            dependencies { api(kotlin("stdlib-common")) }
         }
 
         val commonTest by getting {
             dependencies {
-                implementation(kotlin("test-common", kotlinVersion))
-                implementation(kotlin("test-annotations-common", kotlinVersion))
+                implementation(kotlin("test-common"))
+                implementation(kotlin("test-annotations-common"))
                 implementation(spek("dsl-common"))
                 implementation(spek("runtime-common"))
             }
         }
 
         val jvmMain by getting {
-            dependencies {
-                implementation(kotlin("stdlib", kotlinVersion))
-                implementation(kotlin("reflect", kotlinVersion))
-            }
+            dependencies { api(kotlin("stdlib")) }
         }
 
         val jvmTest by getting {
             dependencies {
-                implementation(kotlin("test-junit", kotlinVersion))
-                implementation(kotlin("test", kotlinVersion))
+                implementation(kotlin("test-junit"))
+                implementation(kotlin("test"))
                 implementation(spek("dsl-jvm"))
                 implementation(spek("runtime-jvm"))
                 implementation(spek("runner-junit5"))
