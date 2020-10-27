@@ -70,7 +70,6 @@ inline fun <V, R> doTry(strict: StrictThrowableMapper<V>, block: () -> R): Eithe
  * In case of successful, the result will be assigned to the Right.
  */
 inline fun <R> doTry(block: () -> R): Either<Throwable, R> = try {
-    runCatching(block)
     Either.right(block())
 } catch (e: Throwable) {
     Either.left(e)
