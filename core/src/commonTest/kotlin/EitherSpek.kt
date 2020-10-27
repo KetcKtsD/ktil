@@ -362,4 +362,16 @@ class EitherSpek : Spek({
             }
         }
     }
+
+    describe("Either.Companion") {
+        it("rightはRightを返す") { assertTrue(Either.right<Int, Int>(1).isRight) }
+
+        it("leftはLeftを返す") { assertTrue(Either.left<Int, Int>(1).isLeft) }
+
+        describe("cond") {
+            it("conditionがtrueの場合はRightを返す") { assertTrue(Either.cond(true, 1, 1).isRight) }
+
+            it("conditionがfalseの場合はLeftを返す") { assertTrue(Either.cond(false, 1, 1).isLeft) }
+        }
+    }
 })
