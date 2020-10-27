@@ -17,12 +17,19 @@ inline class Either<L, R> @PublishedApi internal constructor(
         /**
          * Create a Left.
          */
-        fun <L, R> left(value: L): Either<L, R> = Either(LeftOrRight(value, true))
+        inline fun <L, R> left(value: L): Either<L, R> = Either(LeftOrRight(value, true))
 
         /**
          * Create a Right.
          */
-        fun <L, R> right(value: R): Either<L, R> = Either(LeftOrRight(value, false))
+        inline fun <L, R> right(value: R): Either<L, R> = Either(LeftOrRight(value, false))
+
+        /**
+         * Returns the Right if [condition] is true otherwise Left.
+         */
+        inline fun <L, R> cond(condition: Boolean, right: R, left: L): Either<L, R> {
+            return if (condition) right(right) else left(left)
+        }
     }
 
     /**
@@ -178,7 +185,7 @@ inline class Either<L, R> @PublishedApi internal constructor(
             return result
         }
 
-        override fun toString(): String = if (isLeft) "Left(l=$value)" else "Right(r=$value)"
+        override fun toString(): String = if (isLeft) "Left($value)" else "Right($value)"
     }
 }
 
@@ -226,7 +233,7 @@ inline fun <L, R : Either<L1, R1>, L1 : L, R1> Either<L, R>.joinRight(): Either<
 
 //default right functions
 
-inline fun <L,R> Either<L,R>.get() = right
+inline fun <L, R> Either<L, R>.get() = right
 
 /**
  * Returns this value of Right or result of [onLeft] if this is a Left.
