@@ -1,4 +1,4 @@
-@file:Suppress("NOTHING_TO_INLINE")
+@file:Suppress("NOTHING_TO_INLINE", "UNCHECKED_CAST")
 @file:OptIn(ExperimentalContracts::class)
 
 package tech.ketc.ktil
@@ -40,7 +40,6 @@ inline class Either<L, R> @PublishedApi internal constructor(
      *
      * @throws NoSuchElementException If this is a Right.
      */
-    @Suppress("UNCHECKED_CAST")
     inline val left: L
         get() = if (leftOrRight.isLeft) leftOrRight.value as L else
             throw NoSuchElementException("projection is Right")
@@ -50,7 +49,6 @@ inline class Either<L, R> @PublishedApi internal constructor(
      *
      * @throws NoSuchElementException If this is a Left.
      */
-    @Suppress("UNCHECKED_CAST")
     inline val right: R
         get() = if (leftOrRight.isRight) leftOrRight.value as R else
             throw NoSuchElementException("projection is Left")
@@ -58,7 +56,6 @@ inline class Either<L, R> @PublishedApi internal constructor(
     /**
      * Returns this value of Left, or result of [onRight] if this is a Right.
      */
-    @Suppress("UNCHECKED_CAST")
     inline fun <L1 : L> getLeftOrElse(onRight: (R) -> L1): L {
         contract { callsInPlace(onRight, InvocationKind.AT_MOST_ONCE) }
         if (leftOrRight.isLeft) return leftOrRight.value as L
@@ -68,7 +65,6 @@ inline class Either<L, R> @PublishedApi internal constructor(
     /**
      * Returns this value of Right or result of [onLeft] if this is a Left.
      */
-    @Suppress("UNCHECKED_CAST")
     inline fun <R1 : R> getRightOrElse(onLeft: (L) -> R1): R {
         contract { callsInPlace(onLeft, InvocationKind.AT_MOST_ONCE) }
         if (leftOrRight.isRight) return leftOrRight.value as R
@@ -78,7 +74,6 @@ inline class Either<L, R> @PublishedApi internal constructor(
     /**
      * Returns this Left or result of [onRight] if this is a Right.
      */
-    @Suppress("UNCHECKED_CAST")
     inline fun <L1 : L, R1 : R> leftOrElse(onRight: (R) -> Either<L1, R1>): Either<L, R> {
         contract { callsInPlace(onRight, InvocationKind.AT_MOST_ONCE) }
         return if (leftOrRight.isRight) onRight(leftOrRight.value as R) as Either<L, R> else this
@@ -87,7 +82,6 @@ inline class Either<L, R> @PublishedApi internal constructor(
     /**
      * Returns this Right or result of [onLeft] if this is a Left.
      */
-    @Suppress("UNCHECKED_CAST")
     inline fun <L1 : L, R1 : R> rightOrElse(onLeft: (L) -> Either<L1, R1>): Either<L, R> {
         contract { callsInPlace(onLeft, InvocationKind.AT_MOST_ONCE) }
         return if (leftOrRight.isLeft) onLeft(leftOrRight.value as L) as Either<L, R> else this
@@ -96,7 +90,6 @@ inline class Either<L, R> @PublishedApi internal constructor(
     /**
      * Run a [onLeft] if this is a Left.
      */
-    @Suppress("UNCHECKED_CAST")
     inline fun left(onLeft: (L) -> Unit) {
         contract { callsInPlace(onLeft, InvocationKind.AT_MOST_ONCE) }
         if (leftOrRight.isLeft) onLeft(leftOrRight.value as L)
@@ -105,7 +98,6 @@ inline class Either<L, R> @PublishedApi internal constructor(
     /**
      * Run a [onRight] if this is a Right.
      */
-    @Suppress("UNCHECKED_CAST")
     inline fun right(onRight: (R) -> Unit) {
         contract { callsInPlace(onRight, InvocationKind.AT_MOST_ONCE) }
         if (leftOrRight.isRight) onRight(leftOrRight.value as R)
@@ -114,7 +106,6 @@ inline class Either<L, R> @PublishedApi internal constructor(
     /**
      * Maps the result of [onLeft] to Left.
      */
-    @Suppress("UNCHECKED_CAST")
     inline fun <L1> leftMap(onLeft: (L) -> L1): Either<L1, R> {
         contract { callsInPlace(onLeft, InvocationKind.AT_MOST_ONCE) }
         return if (leftOrRight.isLeft) left(onLeft(leftOrRight.value as L)) else right(leftOrRight.value as R)
@@ -123,7 +114,6 @@ inline class Either<L, R> @PublishedApi internal constructor(
     /**
      * Maps the result of [onRight] to Right.
      */
-    @Suppress("UNCHECKED_CAST")
     inline fun <R1> rightMap(onRight: (R) -> R1): Either<L, R1> {
         contract { callsInPlace(onRight, InvocationKind.AT_MOST_ONCE) }
         return if (leftOrRight.isRight) right(onRight(leftOrRight.value as R)) else left(leftOrRight.value as L)
@@ -132,7 +122,6 @@ inline class Either<L, R> @PublishedApi internal constructor(
     /**
      * Binds the result of [onLeft] to Left.
      */
-    @Suppress("UNCHECKED_CAST")
     inline fun <L1, R1 : R> leftFlatMap(onLeft: (L) -> Either<L1, R1>): Either<L1, R> {
         contract { callsInPlace(onLeft, InvocationKind.AT_MOST_ONCE) }
         return if (leftOrRight.isLeft) return onLeft(leftOrRight.value as L) as Either<L1, R> else right(leftOrRight.value as R)
@@ -141,7 +130,6 @@ inline class Either<L, R> @PublishedApi internal constructor(
     /**
      * Binds the result of [onRight] to Right.
      */
-    @Suppress("UNCHECKED_CAST")
     inline fun <L1 : L, R1> rightFlatMap(onRight: (R) -> Either<L1, R1>): Either<L, R1> {
         contract { callsInPlace(onRight, InvocationKind.AT_MOST_ONCE) }
         return if (leftOrRight.isRight) return onRight(leftOrRight.value as R) as Either<L, R1> else left(leftOrRight.value as L)
@@ -150,7 +138,6 @@ inline class Either<L, R> @PublishedApi internal constructor(
     /**
      * Applies [onLeft] if this is a Left or [onRight] if this is a Right.
      */
-    @Suppress("UNCHECKED_CAST")
     inline fun <T> fold(onLeft: (L) -> T, onRight: (R) -> T): T {
         contract {
             callsInPlace(onLeft, InvocationKind.AT_MOST_ONCE)
@@ -163,7 +150,6 @@ inline class Either<L, R> @PublishedApi internal constructor(
     /**
      * Swap Left and Right.
      */
-    @Suppress("UNCHECKED_CAST")
     inline fun swap(): Either<R, L> {
         return if (leftOrRight.isLeft) right(leftOrRight.value as L) else left(leftOrRight.value as R)
     }
@@ -217,19 +203,16 @@ inline fun <L, R> R.asRight(): Either<L, R> = Either.right(this)
 /**
  * Projects as Left.
  */
-@Suppress("UNCHECKED_CAST")
 inline fun <L, R : L> Either<L, R>.mergeLeft(): L = leftOrRight.value as L
 
 /**
  * Project as Right.
  */
-@Suppress("UNCHECKED_CAST")
 inline fun <L : R, R> Either<L, R>.mergeRight(): R = leftOrRight.value as R
 
 /**
  * Joins an Either through Left.
  */
-@Suppress("UNCHECKED_CAST")
 inline fun <L : Either<L1, R1>, R, L1, R1 : R> Either<L, R>.joinLeft(): Either<L1, R> {
     return if (leftOrRight.isRight) Either.right(leftOrRight.value as R) else leftOrRight.value as Either<L1, R>
 }
@@ -237,12 +220,13 @@ inline fun <L : Either<L1, R1>, R, L1, R1 : R> Either<L, R>.joinLeft(): Either<L
 /**
  * Joins an Either through Right.
  */
-@Suppress("UNCHECKED_CAST")
 inline fun <L, R : Either<L1, R1>, L1 : L, R1> Either<L, R>.joinRight(): Either<L, R1> {
     return if (leftOrRight.isLeft) Either.left(leftOrRight.value as L) else leftOrRight.value as Either<L, R1>
 }
 
 //default right functions
+
+inline fun <L,R> Either<L,R>.get() = right
 
 /**
  * Returns this value of Right or result of [onLeft] if this is a Left.

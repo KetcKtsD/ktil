@@ -290,4 +290,69 @@ class EitherSpek : Spek({
             assertSame(eitherLeft.left, eitherLeft.joinRight().left)
         }
     }
+
+    describe("default right functions") {
+        context("EitherがLeftを持つ場合") {
+            val left by memoized { Left() }
+            val either: Either<Left, Right> by memoized { Either.left(left) }
+
+            it("getはNoSuchElementExceptionを投げる") {
+                assertTrue(assertFails { either.get() } is NoSuchElementException)
+            }
+
+            it("getOrElseは与えられた関数を実行してRightの値を返す") {
+                val right = Right()
+                assertSame(right, either.getOrElse { right })
+            }
+
+            it("orElseは与えられた関数を実行して新たなEitherを返す") {
+                val right = Right()
+                assertSame(right, either.orElse { right.asRight() }.right)
+                val newLeft = object : Left() {}
+                assertSame(newLeft, either.orElse { newLeft.asLeft() }.left)
+            }
+
+            it("mapは与えられた関数を実行せずLeftを返す") {
+                var called = false
+                val result = either.map { called = true; Any() }
+                assertFalse(called)
+                assertTrue(result.isLeft)
+                assertSame(left, result.left)
+            }
+
+            it("flatMapは与えられた関数を実行せずLeftを返す") {
+                val newLeft: Either<ExtLeft, Right> = ExtLeft().asLeft()
+                assertSame(left, either.flatMap { newLeft }.left)
+            }
+        }
+
+        context("EitherがRightを持つ場合") {
+            val right by memoized { Right() }
+            val either: Either<Left, Right> by memoized { Either.right(right) }
+
+            it("getはRightを返す") { assertSame(right, either.get()) }
+
+            it("getOrElseは与えられた関数を実行せずにLeftを返す") {
+                assertSame(right, either.getOrElse { Right() })
+            }
+
+            it("orElseは与えられた関数を実行せずにRightを返す") {
+                assertSame(right, either.orElse { Right().asRight() }.right)
+            }
+
+            it("mapは与えられた関数を実行しRightを返す") {
+                val any = Any()
+                val result = either.map { any }
+                assertTrue(result.isRight)
+                assertSame(any, result.right)
+            }
+
+            it("flatMapは与えられた関数を実行して新たなEitherを返す") {
+                val newRight = 1
+                assertSame(newRight, either.flatMap { newRight.asRight() }.right)
+                val newEither: Either<ExtLeft, Int> = ExtLeft().asLeft()
+                assertSame(newEither.left, either.flatMap { newEither }.left)
+            }
+        }
+    }
 })
