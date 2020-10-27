@@ -3,11 +3,11 @@
 package tech.ketc.ktil
 
 /**
- * @param V Mapped Type
+ * RelaxedErrorMapper
  */
 interface RelaxedErrorMapper<V> {
     /**
-     * Returns a [Throwable] or mapped value
+     * Returns the [Throwable] or mapped value.
      */
     fun map(e: Throwable): Either<Throwable, V>
 
@@ -20,7 +20,13 @@ interface RelaxedErrorMapper<V> {
     }
 }
 
+/**
+ * StrictThrowableMapper
+ */
 interface StrictThrowableMapper<V> {
+    /**
+     * Returns the mapped value.
+     */
     fun map(e: Throwable): V
 
     companion object {
@@ -32,6 +38,12 @@ interface StrictThrowableMapper<V> {
     }
 }
 
+/**
+ * Calls the specified function [block] and returns its encapsulated result if invocation was successful,
+ * catching any [Throwable] that was thrown from the [block] function execution and mapped by [relaxed] it as a failure.
+ *
+ * In case of successful, the result will be assigned to the Right.
+ */
 inline fun <V, R> doTry(relaxed: RelaxedErrorMapper<V>, block: () -> R): Either<Either<Throwable, V>, R> = try {
     Either.right(block())
 } catch (e: Throwable) {
@@ -39,14 +51,26 @@ inline fun <V, R> doTry(relaxed: RelaxedErrorMapper<V>, block: () -> R): Either<
     Either.left(value)
 }
 
+/**
+ * Calls the specified function [block] and returns its encapsulated result if invocation was successful,
+ * catching any [Throwable] that was thrown from the [block] function execution and mapped by [strict] it as a failure.
+ *
+ * In case of successful, the result will be assigned to the Right.
+ */
 inline fun <V, R> doTry(strict: StrictThrowableMapper<V>, block: () -> R): Either<V, R> = try {
     Either.right(block())
 } catch (e: Throwable) {
     Either.left(strict.map(e))
 }
 
-
+/**
+ * Calls the specified function [block] and returns its encapsulated result if invocation was successful,
+ * catching any [Throwable] that was thrown from the [block] function execution and encapsulating it as a failure.
+ *
+ * In case of successful, the result will be assigned to the Right.
+ */
 inline fun <R> doTry(block: () -> R): Either<Throwable, R> = try {
+    runCatching(block)
     Either.right(block())
 } catch (e: Throwable) {
     Either.left(e)
