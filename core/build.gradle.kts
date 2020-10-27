@@ -1,12 +1,7 @@
 plugins {
     kotlin("multiplatform")
+    id("org.jetbrains.dokka")
     id("maven-publish")
-}
-
-repositories {
-    jcenter()
-    mavenCentral()
-    maven { setUrl("https://dl.bintray.com/spekframework/spek-dev/") }
 }
 
 kotlin {
