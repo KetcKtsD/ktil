@@ -292,6 +292,13 @@ class EitherSpek : Spek({
     }
 
     describe("default right functions") {
+        it("mergeは値を変更しない") {
+            val left: Either<ExtRight, Right> = Right().asRight()
+            assertSame(left.right, left.merge())
+            val right: Either<ExtRight, Right> = ExtRight().asLeft()
+            assertSame(right.left, right.merge())
+        }
+
         context("EitherがLeftを持つ場合") {
             val left by memoized { Left() }
             val either: Either<Left, Right> by memoized { Either.left(left) }
