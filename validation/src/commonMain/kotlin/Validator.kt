@@ -126,7 +126,7 @@ abstract class Validator<T : Any>(initializer: ValidationScope<T>.() -> Unit) {
                     }
                 }
             }
-            return if (errors.isEmpty()) target.asRight() else errors.asLeft()
+            return Either.cond(errors.isEmpty(), target, errors)
         }
     }
 
