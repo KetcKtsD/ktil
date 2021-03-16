@@ -1,5 +1,5 @@
 buildscript {
-    val kotlinVersion by extra { "1.4.10" }
+    val kotlinVersion by extra { "1.4.31" }
     val dokkaVersion by extra { "1.4.10.2" }
 
     apply(from = "common-dependencies.gradle.kts")
