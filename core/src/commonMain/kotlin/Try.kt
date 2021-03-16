@@ -23,17 +23,17 @@ interface RelaxedErrorMapper<V> {
 /**
  * StrictThrowableMapper
  */
-interface StrictThrowableMapper<V> {
+interface StrictErrorMapper<V> {
     /**
      * Returns the mapped value.
      */
     fun map(e: Throwable): V
 
     companion object {
-        operator fun <V> invoke(map: (Throwable) -> V): StrictThrowableMapper<V> = Impl(map)
+        operator fun <V> invoke(map: (Throwable) -> V): StrictErrorMapper<V> = Impl(map)
     }
 
-    private class Impl<V>(private val map: (Throwable) -> V) : StrictThrowableMapper<V> {
+    private class Impl<V>(private val map: (Throwable) -> V) : StrictErrorMapper<V> {
         override fun map(e: Throwable): V = map.invoke(e)
     }
 }
@@ -57,7 +57,7 @@ inline fun <V, R> doTry(relaxed: RelaxedErrorMapper<V>, block: () -> R): Either<
  *
  * In case of successful, the result will be assigned to the Right.
  */
-inline fun <V, R> doTry(strict: StrictThrowableMapper<V>, block: () -> R): Either<V, R> = try {
+inline fun <V, R> doTry(strict: StrictErrorMapper<V>, block: () -> R): Either<V, R> = try {
     Either.right(block())
 } catch (e: Throwable) {
     Either.left(strict.map(e))

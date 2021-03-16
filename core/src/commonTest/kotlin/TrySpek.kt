@@ -45,7 +45,7 @@ class TrySpek : Spek({
 
     describe("doTry(strict,block)") {
         val error by memoized { Any() }
-        val strict = StrictThrowableMapper { error }
+        val strict = StrictErrorMapper { error }
 
         it("blockが例外を投げなければRightが返る") {
             val either = doTry(strict) { 1 + 1 }

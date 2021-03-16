@@ -1,6 +1,6 @@
 rootProject.name = "ktil"
 
-include(":core", ":validation")
+val projects = arrayOf(":core", ":validation", ":coroutines")
+include(*projects)
 
-project(":core").name = "ktil-core"
-project(":validation").name = "ktil-validation"
+projects.forEach { project(it).name = "ktil-${it.replace(":", "")}" }

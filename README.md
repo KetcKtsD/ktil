@@ -34,13 +34,15 @@ repositories {
 
 ## Supported platforms
 
-- `common` (metadata)
+- `metadata` (common)
 - `jvm`
 
 ## Modules
 
 ### [ktil-core](https://github.com/KetcKtsD/ktil/tree/develop/core)
+
 ちょっとした拡張関数や`Either<L､R>`などのユーティリティを提供する
 
 ### [ktil-validation](https://github.com/KetcKtsD/ktil/tree/develop/validation)
+
 シンプルなバリデーション用のDSLを提供する

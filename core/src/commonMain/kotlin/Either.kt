@@ -6,10 +6,10 @@ package tech.ketc.ktil
 import kotlin.contracts.*
 
 /**
- * Either
+ * Simple Either Type
  */
 @Suppress("NON_PUBLIC_PRIMARY_CONSTRUCTOR_OF_INLINE_CLASS")
-inline class Either<L, R> @PublishedApi internal constructor(
+inline class Either<out L, out R> @PublishedApi internal constructor(
     @PublishedApi
     internal val leftOrRight: LeftOrRight
 ) {
@@ -61,40 +61,6 @@ inline class Either<L, R> @PublishedApi internal constructor(
             throw NoSuchElementException("projection is Left")
 
     /**
-     * Returns this value of Left, or result of [onRight] if this is a Right.
-     */
-    inline fun <L1 : L> getLeftOrElse(onRight: (R) -> L1): L {
-        contract { callsInPlace(onRight, InvocationKind.AT_MOST_ONCE) }
-        if (leftOrRight.isLeft) return leftOrRight.value as L
-        return onRight(leftOrRight.value as R)
-    }
-
-    /**
-     * Returns this value of Right or result of [onLeft] if this is a Left.
-     */
-    inline fun <R1 : R> getRightOrElse(onLeft: (L) -> R1): R {
-        contract { callsInPlace(onLeft, InvocationKind.AT_MOST_ONCE) }
-        if (leftOrRight.isRight) return leftOrRight.value as R
-        return onLeft(leftOrRight.value as L)
-    }
-
-    /**
-     * Returns this Left or result of [onRight] if this is a Right.
-     */
-    inline fun <L1 : L, R1 : R> leftOrElse(onRight: (R) -> Either<L1, R1>): Either<L, R> {
-        contract { callsInPlace(onRight, InvocationKind.AT_MOST_ONCE) }
-        return if (leftOrRight.isRight) onRight(leftOrRight.value as R) as Either<L, R> else this
-    }
-
-    /**
-     * Returns this Right or result of [onLeft] if this is a Left.
-     */
-    inline fun <L1 : L, R1 : R> rightOrElse(onLeft: (L) -> Either<L1, R1>): Either<L, R> {
-        contract { callsInPlace(onLeft, InvocationKind.AT_MOST_ONCE) }
-        return if (leftOrRight.isLeft) onLeft(leftOrRight.value as L) as Either<L, R> else this
-    }
-
-    /**
      * Run a [onLeft] if this is a Left.
      */
     inline fun left(onLeft: (L) -> Unit) {
@@ -124,22 +90,6 @@ inline class Either<L, R> @PublishedApi internal constructor(
     inline fun <R1> rightMap(onRight: (R) -> R1): Either<L, R1> {
         contract { callsInPlace(onRight, InvocationKind.AT_MOST_ONCE) }
         return if (leftOrRight.isRight) right(onRight(leftOrRight.value as R)) else left(leftOrRight.value as L)
-    }
-
-    /**
-     * Binds the result of [onLeft] to Left.
-     */
-    inline fun <L1, R1 : R> leftFlatMap(onLeft: (L) -> Either<L1, R1>): Either<L1, R> {
-        contract { callsInPlace(onLeft, InvocationKind.AT_MOST_ONCE) }
-        return if (leftOrRight.isLeft) return onLeft(leftOrRight.value as L) as Either<L1, R> else right(leftOrRight.value as R)
-    }
-
-    /**
-     * Binds the result of [onRight] to Right.
-     */
-    inline fun <L1 : L, R1> rightFlatMap(onRight: (R) -> Either<L1, R1>): Either<L, R1> {
-        contract { callsInPlace(onRight, InvocationKind.AT_MOST_ONCE) }
-        return if (leftOrRight.isRight) return onRight(leftOrRight.value as R) as Either<L, R1> else left(leftOrRight.value as L)
     }
 
     /**
@@ -205,6 +155,61 @@ inline fun <L, R> L.asLeft(): Either<L, R> = Either.left(this)
 @Suppress("NOTHING_TO_INLINE")
 inline fun <L, R> R.asRight(): Either<L, R> = Either.right(this)
 
+//basic functions
+
+/**
+ * Binds the result of [onRight] to Right.
+ */
+inline fun <L, R, L1 : L, R1> Either<L, R>.rightFlatMap(onRight: (R) -> Either<L1, R1>): Either<L, R1> {
+    contract { callsInPlace(onRight, InvocationKind.AT_MOST_ONCE) }
+    return if (leftOrRight.isRight) return onRight(leftOrRight.value as R) else
+        Either.left(leftOrRight.value as L)
+}
+
+/**
+ * Binds the result of [onLeft] to Left.
+ */
+inline fun <L, R, L1, R1 : R> Either<L, R>.leftFlatMap(onLeft: (L) -> Either<L1, R1>): Either<L1, R> {
+    contract { callsInPlace(onLeft, InvocationKind.AT_MOST_ONCE) }
+    return if (leftOrRight.isLeft) return onLeft(leftOrRight.value as L) else
+        Either.right(leftOrRight.value as R)
+}
+
+/**
+ * Returns this Right or result of [onLeft] if this is a Left.
+ */
+inline fun <L, R, L1 : L, R1 : R> Either<L, R>.rightOrElse(onLeft: (L) -> Either<L1, R1>): Either<L, R> {
+    contract { callsInPlace(onLeft, InvocationKind.AT_MOST_ONCE) }
+    return if (leftOrRight.isLeft) onLeft(leftOrRight.value as L) else this
+}
+
+/**
+ * Returns this Left or result of [onRight] if this is a Right.
+ */
+inline fun <L, R, L1 : L, R1 : R> Either<L, R>.leftOrElse(onRight: (R) -> Either<L1, R1>): Either<L, R> {
+    contract { callsInPlace(onRight, InvocationKind.AT_MOST_ONCE) }
+    return if (leftOrRight.isRight) onRight(leftOrRight.value as R) else this
+}
+
+/**
+ * Returns this value of Left, or result of [onRight] if this is a Right.
+ */
+inline fun <L, R, L1 : L> Either<L, R>.getLeftOrElse(onRight: (R) -> L1): L {
+    contract { callsInPlace(onRight, InvocationKind.AT_MOST_ONCE) }
+    if (leftOrRight.isLeft) return leftOrRight.value as L
+    return onRight(leftOrRight.value as R)
+}
+
+/**
+ * Returns this value of Right or result of [onLeft] if this is a Left.
+ */
+inline fun <L, R, R1 : R> Either<L, R>.getRightOrElse(onLeft: (L) -> R1): R {
+    contract { callsInPlace(onLeft, InvocationKind.AT_MOST_ONCE) }
+    if (leftOrRight.isRight) return leftOrRight.value as R
+    return onLeft(leftOrRight.value as L)
+}
+
+
 //ext functions
 
 /**
@@ -219,6 +224,8 @@ inline fun <L : R, R> Either<L, R>.mergeRight(): R = leftOrRight.value as R
 
 /**
  * Joins an Either through Left.
+ *
+ * Either<Either<L, R>, R> to Either<L, R>
  */
 inline fun <L : Either<L1, R1>, R, L1, R1 : R> Either<L, R>.joinLeft(): Either<L1, R> {
     return if (leftOrRight.isRight) Either.right(leftOrRight.value as R) else leftOrRight.value as Either<L1, R>
@@ -226,6 +233,8 @@ inline fun <L : Either<L1, R1>, R, L1, R1 : R> Either<L, R>.joinLeft(): Either<L
 
 /**
  * Joins an Either through Right.
+ *
+ * Either<L, Either<L, R>> to Either<L, R>
  */
 inline fun <L, R : Either<L1, R1>, L1 : L, R1> Either<L, R>.joinRight(): Either<L, R1> {
     return if (leftOrRight.isLeft) Either.left(leftOrRight.value as L) else leftOrRight.value as Either<L, R1>
