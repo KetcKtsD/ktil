@@ -18,14 +18,14 @@ kotlin {
         }
     }
 
+    val coroutines: (String) -> String by extra
     val spek: (String) -> String by extra
 
     @Suppress("UNUSED_VARIABLE")
     sourceSets {
-        all { dependencies { api(project(":ktil-core")) } }
-
         val commonMain by getting {
             dependencies { api(kotlin("stdlib-common")) }
+            dependencies { api(coroutines("core")) }
         }
 
         val commonTest by getting {
@@ -39,6 +39,7 @@ kotlin {
 
         val jvmMain by getting {
             dependencies { api(kotlin("stdlib")) }
+            dependencies { api(coroutines("core-jvm")) }
         }
 
         val jvmTest by getting {
