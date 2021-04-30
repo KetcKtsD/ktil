@@ -5,8 +5,9 @@ plugins {
 }
 
 kotlin {
+    val jvmTargetVersion: String by extra
     jvm {
-        compilations.all { kotlinOptions { jvmTarget = "14" } }
+        compilations.all { kotlinOptions { jvmTarget = jvmTargetVersion } }
         testRuns.all { executionTask.configure { useJUnitPlatform { includeEngines = setOf("spek", "spek2") } } }
         withJava()
     }

@@ -25,4 +25,12 @@ subprojects {
 
     group = "tech.ketc.ktil"
     version = "0.2.0"
+
+    extensions.extraProperties.apply {
+        this["jvmTargetVersion"] = "15"
+    }
+}
+
+tasks {
+    wrapper { gradleVersion = "6.8.3" }
 }
