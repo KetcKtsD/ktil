@@ -4,12 +4,14 @@
 package tech.ketc.ktil
 
 import kotlin.contracts.*
+import kotlin.jvm.JvmInline
 
 /**
  * Simple Either Type
  */
 @Suppress("NON_PUBLIC_PRIMARY_CONSTRUCTOR_OF_INLINE_CLASS")
-inline class Either<out L, out R> @PublishedApi internal constructor(
+@JvmInline
+value class Either<out L, out R> @PublishedApi internal constructor(
     @PublishedApi
     internal val leftOrRight: LeftOrRight
 ) {

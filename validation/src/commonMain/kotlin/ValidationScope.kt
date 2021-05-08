@@ -5,7 +5,7 @@ import kotlin.reflect.*
 /**
  * ValidationScope
  */
-interface ValidationScope<T : Any> {
+sealed interface ValidationScope<T : Any> {
     /**
      * Set conditions for receiver validation
      */

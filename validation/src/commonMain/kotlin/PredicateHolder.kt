@@ -3,7 +3,7 @@ package tech.ketc.ktil.validation
 /**
  * PredicateHolder
  */
-interface PredicateHolder {
+sealed interface PredicateHolder {
     /**
      * Set an error message if you choose to validate
      */
