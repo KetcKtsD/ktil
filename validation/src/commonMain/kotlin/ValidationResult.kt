@@ -3,7 +3,7 @@ package tech.ketc.ktil.validation
 import tech.ketc.ktil.*
 import kotlin.reflect.*
 
-typealias ValidationResult<T> = Either<List<ValidationError>, out T>
+typealias ValidationResult<T> = Either<List<ValidationError>, T>
 
 /**
  * ValidationError

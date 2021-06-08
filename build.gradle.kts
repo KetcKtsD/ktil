@@ -1,5 +1,5 @@
 buildscript {
-    val kotlinVersion by extra { "1.4.31" }
+    val kotlinVersion by extra { "1.5.0" }
     val dokkaVersion by extra { "1.4.10.2" }
 
     apply(from = "common-dependencies.gradle.kts")
@@ -25,4 +25,12 @@ subprojects {
 
     group = "tech.ketc.ktil"
     version = "0.2.0"
+
+    extensions.extraProperties.apply {
+        this["jvmTargetVersion"] = "15"
+    }
+}
+
+tasks {
+    wrapper { gradleVersion = "6.8.3" }
 }

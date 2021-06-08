@@ -5,15 +5,15 @@ plugins {
 }
 
 kotlin {
+    val jvmTargetVersion: String by extra
     jvm {
-        compilations.all { kotlinOptions { jvmTarget = "14" } }
+        compilations.all { kotlinOptions { jvmTarget = jvmTargetVersion } }
         testRuns.all { executionTask.configure { useJUnitPlatform { includeEngines = setOf("spek", "spek2") } } }
         withJava()
     }
 
     sourceSets.all {
         languageSettings.apply {
-            enableLanguageFeature("InlineClasses")
             useExperimentalAnnotation("kotlin.RequiresOptIn")
         }
     }
@@ -28,7 +28,7 @@ kotlin {
 
         val commonTest by getting {
             dependencies {
-                implementation(kotlin("test-common"))
+                implementation(kotlin("test"))
                 implementation(kotlin("test-annotations-common"))
                 implementation(spek("dsl-common"))
                 implementation(spek("runtime-common"))
@@ -41,7 +41,6 @@ kotlin {
 
         val jvmTest by getting {
             dependencies {
-                implementation(kotlin("test-junit"))
                 implementation(kotlin("test"))
                 implementation(spek("dsl-jvm"))
                 implementation(spek("runtime-jvm"))

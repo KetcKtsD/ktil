@@ -8,7 +8,7 @@ import kotlinx.coroutines.*
  * For example,
  * if want to do a job join but don't want to call a cancel, can wrap it in this interface
  */
-interface Joinable {
+sealed interface Joinable {
 
     /**
      * Suspends the coroutine until this task is complete.
